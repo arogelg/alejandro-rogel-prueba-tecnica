@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, redirect, session
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 import logging
 from datetime import datetime, timedelta
 from weather_service import fetch_weather_data, WeatherDataError
@@ -7,13 +7,17 @@ import os
 from dotenv import load_dotenv
 from model import preprocess_weather_data, validate_and_adjust_data, create_and_train_model, predict_future_weather, plot_weather_trend
 
-# Variable global para almacenar las predicciones
+# Variables globales para almacenar datos
 predictions_data = []
+summary = {}
+current_weather = {}
+city = ""
+
+# Cargamos las variables de entorno
+load_dotenv()
+API_KEY = os.getenv("WEATHER_API_KEY")
 
 app = Flask(__name__)
-
-# Configuramos la clave secreta para manejar sesiones
-app.secret_key = os.getenv("SECRET_KEY", "your_default_secret_key")
 
 # Configuramos el nivel de logging
 app.logger.setLevel(logging.INFO)
@@ -23,10 +27,6 @@ handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
-
-# Cargamos las variables de entorno
-load_dotenv()
-API_KEY = os.getenv("WEATHER_API_KEY")
 
 # Validamos que exista una clave de API para evitar errores
 if not API_KEY:
@@ -44,7 +44,7 @@ def index():
 
 @app.route('/process_data', methods=['POST'])
 def process_data():
-    global predictions_data  # Declarar que se usará la variable global
+    global predictions_data, summary, current_weather, city  # Declaramos las variables globales que usaremos
     """
     Realiza la carga de los datos para la ciudad especificada por el usuario, los procesa y entrena un modelo al igual que realiza predicciones.
     """
@@ -77,10 +77,9 @@ def process_data():
         ]
         app.logger.info(f"Predictions: {predictions_data}")
 
-        # Guardamos el resumen del análisis y los datos actuales en la sesión
-        session['summary'] = analyze_weather_data(weather_data)
-        session['current_weather'] = current_weather
-        session['city'] = city
+        # Guardamos el resumen del análisis
+        summary = analyze_weather_data(weather_data)
+        plot_weather_trend(weather_data, predictions_data)
 
         # Redirigimos a la página de resultados
         return redirect(url_for('results'))
@@ -93,19 +92,15 @@ def results():
     """
     Muestra los resultados del análisis y las predicciones.
     """
-    # Recuperamos los datos de la sesión y los mostramos 
-    predictions = session.get('predictions', [])
-    summary = session.get('summary', {})
-    current_weather = session.get('current_weather', {})
-    city = session.get('city', "Unknown")
+    global summary, predictions_data, current_weather, city  # Declaramos las variables globales que usaremos
 
-    # Si no hay predicciones disponibles, mostramos un mensaje de error
-    if not predictions:
-        return render_template('error.html', message="No predictions available. Please try again.")
-    
+    # Validamos que existan datos disponibles
+    if not predictions_data or not summary or not current_weather:
+        app.logger.error("No predictions or summary found")
+        return render_template('error.html', message="No data available. Please try again.")
+
     # Renderizamos la página de resultados con los datos obtenidos
     return render_template('results.html', city=city, summary=summary, current_weather=current_weather)
-
 
 @app.route('/predictions')
 def predictions():
@@ -115,6 +110,5 @@ def predictions():
     global predictions_data  # Usamos la variable global para manejar predicciones
     if not predictions_data:
         return render_template('error.html', message="No hay predicciones disponibles. Realiza un análisis primero.")
-    
     # Renderizamos la página de predicciones con las predicciones calculadas
     return render_template('predictions.html', predictions=predictions_data)

@@ -234,7 +234,12 @@ def plot_weather_trend(historical_data, predictions):
     historical_temps = [d['average_temp'] for d in historical_data]
 
     # Convertimos nuestras predicciones en listas para graficar
-    prediction_dates = [datetime.strptime(p['date'], '%Y-%m-%d') for p in predictions]
+    try:
+        prediction_dates = [
+            datetime.strptime(p['date'], '%Y-%m-%d') for p in predictions if 'date' in p
+        ]
+    except KeyError as e:
+        raise ValueError(f"Elemento en 'predictions' no contiene la clave 'date': {e}")
     predicted_temps = [p['predicted_temp'] for p in predictions]
 
     # Creamos la figura y los ejes
