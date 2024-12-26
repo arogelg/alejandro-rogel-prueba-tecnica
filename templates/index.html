@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis del Clima</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dark-theme">
+    <!-- Contenedor Principal -->
+    <div class="container">
+        <h1>🌧️ Análisis del Clima y Predicción ☀️</h1>
+        <form id="weather-form" action="/process_data" method="POST" class="weather-form">
+            <label for="city">Favor de ingresar una ciudad (en ingles):</label>
+            <input type="text" id="city" name="city" placeholder="Ejemplo: London" required>
+            <button type="submit">Analizar Clima</button>
+        </form>
+    </div>
+
+    <!-- Loader como Pop-Up -->
+    <div id="loader" class="hidden">
+        <div class="spinner"></div>
+        <p>🌦️ El clima está siendo obtenido...<br> ¡Gracias por tu paciencia! ☕</p>
+    </div>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const form = document.getElementById('weather-form');
+            const loader = document.getElementById('loader');
+            const container = document.querySelector('.container');
+
+            // Evento para mostrar el loader
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Detenemos el envío inicial
+
+                loader.classList.remove('hidden'); // Mostrar loader
+                container.style.display = 'none'; // Ocultar formulario
+
+                // Simular retraso antes de enviar el formulario
+                setTimeout(() => {
+                    form.submit(); // Enviar formulario después del retraso
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

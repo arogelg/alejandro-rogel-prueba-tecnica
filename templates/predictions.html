@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicciones del Clima</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>🌧️ Predicciones del Clima ☀️</h1>
+
+        <!-- Tabla alargada -->
+        <div class="flex-item">
+            <h2>Tabla de Predicciones</h2>
+            <table class="weather-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Temperatura Predicha (°C)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in predictions %}
+                    <tr>
+                        <td>{{ prediction.date }}</td>
+                        <td>{{ prediction.predicted_temp|round(3) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Gráfico debajo de la tabla -->
+        <div class="flex-item" style="margin-top: 30px;">
+            <h2>Visualización de Predicciones</h2>
+            <div class="graph-placeholder">
+                <img src="{{ url_for('static', filename='weather_trend.png') }}" alt="Gráfico de Predicciones del Clima">
+            </div>
+        </div>
+
+        <!-- Botón para regresar al inicio -->
+        <div class="button-container">
+            <button class="button" onclick="location.href='{{ url_for('index') }}'">Volver al Inicio</button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="location.href='{{ url_for('results') }}'">Volver a los resultados</button>
+        </div>
+    </div>
+</body>
+</html>

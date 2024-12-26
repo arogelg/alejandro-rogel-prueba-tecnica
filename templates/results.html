@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Clima</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>Análisis del Clima para {{ city }}</h1>
+
+        <h2>Condiciones Actuales</h2>
+        <table class="weather-table">
+            <thead>
+                <tr>
+                    <th>Temperatura (°C)</th>
+                    <th>Humedad (%)</th>
+                    <th>Precipitación (mm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ current_weather.average_temp }}</td>
+                    <td>{{ current_weather.humidity }}</td>
+                    <td>{{ current_weather.precipitation }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Promedio de los Últimos 30 Días</h2>
+        <table class="weather-table">
+            <thead>
+                <tr>
+                    <th>Temperatura Promedio (°C)</th>
+                    <th>Precipitación Total (mm)</th>
+                    <th>Días de Lluvia</th>
+                    <th>Temperatura Máxima (°C)</th>
+                    <th>Temperatura Mínima (°C)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ summary.average_temp_overall|round(3) }}</td>
+                    <td>{{ summary.total_precipitation }}</td>
+                    <td>{{ summary.rainy_days }}</td>
+                    <td>{{ summary.max_temp }}</td>
+                    <td>{{ summary.min_temp }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px;">
+            <button class="button" onclick="location.href='{{ url_for('predictions') }}'">Checar predicciones del clima</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="button" onclick="location.href='{{ url_for('index') }}'">Volver al Inicio</button>
+        </div>
+    </div>
+</body>
+</html>

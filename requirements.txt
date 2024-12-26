@@ -1,0 +1,10 @@
+flask
+numpy
+pandas
+scikit-learn
+requests
+python-dotenv
+requests
+python-dotenv
+matplotlib
+seaborn
