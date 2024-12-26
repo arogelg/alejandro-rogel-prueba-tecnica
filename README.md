@@ -29,7 +29,7 @@ Este proyecto es una aplicación web desarrollada con Flask que permite analizar
 
 ```bash
 git clone https://github.com/arogelg/alejandro-rogel-prueba-tecnica.git
-cd PRUEBA TECICA XAI
+cd alejandro-rogel-prueba-tecnica
 ```
 
 ### 2. Configura tus Variables de Entorno
@@ -46,7 +46,6 @@ Si no usas Docker, instala las dependencias manualmente:
 
 ```
 bash
-Copy code
 pip install -r requirements.txt
 ```
 
