@@ -28,8 +28,8 @@ Este proyecto es una aplicación web desarrollada con Flask que permite analizar
 ### 1. Clona el Repositorio
 
 ```bash
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
+git clone https://github.com/arogelg/alejandro-rogel-prueba-tecnica.git
+cd PRUEBA TECICA XAI
 ```
 
 ### 2. Configura tus Variables de Entorno
@@ -37,8 +37,8 @@ cd tu_repositorio
 Crea un archivo `.env` en el directorio raíz del proyecto y agrega lo siguiente:
 
 ```makefile
-WEATHER_API_KEY=tu_clave_de_weather_api
-SECRET_KEY=tu_clave_secreta_para_sesiones
+WEATHER_API_KEY=294c6ba3318645b9ada190953242412
+SECRET_KEY=38,\-cO'awm>-x#Xai`|Mi4B5}lQ$?D_Vz*3gb(}
 ```
 
 ### 3. Instala las Dependencias
@@ -54,7 +54,6 @@ pip install -r requirements.txt
 Usando Python:
 ```
 bash
-Copy code
 python app.py
 ```
 La aplicación estará disponible en: http://127.0.0.1:5000
@@ -63,7 +62,6 @@ Usando Docker:
 
 ```
 bash
-Copy code
 docker build -t weather-app .
 docker run -p 5000:5000 weather-app
 ```
